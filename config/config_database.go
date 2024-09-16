@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"os"
+	"todo-app/constants"
 )
 
 var DB *gorm.DB
@@ -31,5 +32,5 @@ func ConnectDatabase() {
 	}
 
 	DB = db
-	fmt.Println("Kết nối thành công tới MySQL!")
+	fmt.Println(constants.CONNECT_DB_SUCCESS)
 }
