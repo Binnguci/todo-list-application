@@ -2,10 +2,12 @@ package services
 
 import (
 	"github.com/jinzhu/copier"
+	"log"
 	"time"
 	"todo-app/dto/request"
 	"todo-app/dto/response"
 	"todo-app/repositories"
+	"todo-app/utils"
 )
 
 type UserServiceImpl struct {
@@ -17,6 +19,10 @@ func NewUserServiceImpl(userRepository repositories.UserRepository) UserService 
 }
 
 func (s *UserServiceImpl) Register(request request.RegisterRequest) (response.UserResponse, error) {
+	if err := utils.ValidatePassword(request.Password); err != nil {
+		log.Printf("Password validation failed: %v", err)
+		return response.UserResponse{}, err
+	}
 	user, err := s.userRepository.Register(request)
 	if err != nil {
 		return response.UserResponse{}, err
