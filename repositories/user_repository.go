@@ -7,4 +7,5 @@ import (
 
 type UserRepository interface {
 	Register(request request.RegisterRequest) (models.User, error)
+	FindByUsername(username string) (models.User, error)
 }

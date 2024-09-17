@@ -8,6 +8,7 @@ import (
 	"todo-app/dto/response"
 	"todo-app/error"
 	"todo-app/services"
+	"todo-app/utils"
 )
 
 type UserController struct {
@@ -50,4 +51,26 @@ func (c *UserController) RegisterUser(ctx *gin.Context) {
 		Message: error.CREATE_SUCCESS.Message,
 		Data:    userResponse,
 	})
+}
+func (c *UserController) Login(ctx *gin.Context) {
+	var req request.AuthenticationRequest
+	if err := ctx.BindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	user, err := c.userService.VerifyUser(req.Username, req.Password)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+		return
+	}
+
+	// Generate JWT token
+	token, err := utils.GenerateJWT(user.Username, user.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating token"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"token": token})
 }

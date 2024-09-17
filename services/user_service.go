@@ -7,4 +7,5 @@ import (
 
 type UserService interface {
 	Register(request request.RegisterRequest) (response.UserResponse, error)
+	VerifyUser(username string, password string) (response.UserResponse, error)
 }
