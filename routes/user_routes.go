@@ -12,6 +12,7 @@ func UserRoutes(userController *controllers.UserController) *gin.Engine {
 	router := r.Group("/api/user/")
 	{
 		router.POST("/register", userController.RegisterUser)
+		router.POST("/login", userController.Login)
 	}
 	return r
 }

@@ -1,10 +1,10 @@
 package repositories
 
 import (
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"todo-app/dto/request"
 	"todo-app/models"
+	"todo-app/utils"
 )
 
 type UserRepositoryImpl struct {
@@ -15,17 +15,12 @@ func NewUserRepositoryImpl(db *gorm.DB) UserRepository {
 	return &UserRepositoryImpl{Db: db}
 }
 
-func hashpass(password string) (encodePassword string, err error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	return string(bytes), err
-}
-
 func (r *UserRepositoryImpl) Register(req request.RegisterRequest) (models.User, error) {
 	var defaultRole models.Role
 	if err := r.Db.Where("name = ?", "user").First(&defaultRole).Error; err != nil {
 		return models.User{}, err
 	}
-	hashpass, err := hashpass(req.Password)
+	hashpass, err := utils.HashPassword(req.Password)
 	if err != nil {
 		return models.User{}, err
 	}
@@ -43,4 +38,13 @@ func (r *UserRepositoryImpl) Register(req request.RegisterRequest) (models.User,
 	}
 
 	return user, nil
+}
+
+func (r *UserRepositoryImpl) FindByUsername(username string) (models.User, error) {
+	var user models.User
+	if err := r.Db.Where("username = ?", username).Preload("Roles").First(&user).Error; err != nil {
+		return models.User{}, err
+	}
+	return user, nil
+
 }

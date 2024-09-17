@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"github.com/jinzhu/copier"
 	"log"
 	"time"
@@ -35,5 +36,22 @@ func (s *UserServiceImpl) Register(request request.RegisterRequest) (response.Us
 	userResponse.Created = user.CreatedAt.Format(time.RFC3339)
 	userResponse.Updated = user.UpdatedAt.Format(time.RFC3339)
 	return userResponse, nil
+}
 
+func (s *UserServiceImpl) VerifyUser(username string, password string) (response.UserResponse, error) {
+	user, err := s.userRepository.FindByUsername(username)
+	if err != nil {
+		return response.UserResponse{}, errors.New("user not found")
+	}
+	err = utils.ComparePasswords(user.Password, password)
+	if err != nil {
+		return response.UserResponse{}, errors.New("invalid credentials")
+	}
+	var userResponse response.UserResponse
+	err = copier.Copy(&userResponse, &user)
+	if err != nil {
+		return userResponse, err
+	}
+
+	return userResponse, nil
 }
