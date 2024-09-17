@@ -65,7 +65,6 @@ func (c *UserController) Login(ctx *gin.Context) {
 		return
 	}
 
-	// Generate JWT token
 	token, err := utils.GenerateJWT(user.Username, user.ID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating token"})

@@ -18,7 +18,11 @@ func main() {
 	userService := services.NewUserServiceImpl(userRepository)
 	userController := controllers.NewUserController(userService)
 
-	router := routes.UserRoutes(userController)
+	taskRepository := repositories.NewTaskRepositoryImpl(config.DB)
+	taskService := services.NewTaskServiceImpl(taskRepository)
+	taskController := controllers.NewTaskController(taskService)
+
+	router := routes.UserRoutes(userController, taskController)
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        router,

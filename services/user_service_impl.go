@@ -19,12 +19,12 @@ func NewUserServiceImpl(userRepository repositories.UserRepository) UserService 
 	return &UserServiceImpl{userRepository: userRepository}
 }
 
-func (s *UserServiceImpl) Register(request request.RegisterRequest) (response.UserResponse, error) {
+func (u *UserServiceImpl) Register(request request.RegisterRequest) (response.UserResponse, error) {
 	if err := utils.ValidatePassword(request.Password); err != nil {
 		log.Printf("Password validation failed: %v", err)
 		return response.UserResponse{}, err
 	}
-	user, err := s.userRepository.Register(request)
+	user, err := u.userRepository.Register(request)
 	if err != nil {
 		return response.UserResponse{}, err
 	}
@@ -38,8 +38,8 @@ func (s *UserServiceImpl) Register(request request.RegisterRequest) (response.Us
 	return userResponse, nil
 }
 
-func (s *UserServiceImpl) VerifyUser(username string, password string) (response.UserResponse, error) {
-	user, err := s.userRepository.FindByUsername(username)
+func (u *UserServiceImpl) VerifyUser(username string, password string) (response.UserResponse, error) {
+	user, err := u.userRepository.FindByUsername(username)
 	if err != nil {
 		return response.UserResponse{}, errors.New("user not found")
 	}
