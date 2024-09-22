@@ -37,16 +37,16 @@ func (t *TaskServiceImpl) Create(task models.Task) (models.Task, error) {
 	return task, nil
 }
 
-func (t *TaskServiceImpl) Update(task models.Task) (models.Task, error) {
-	task, err := t.taskRepository.Update(task)
+func (t *TaskServiceImpl) Update(id int, task models.Task) (models.Task, error) {
+	updatedTask, err := t.taskRepository.Update(id, task)
 	if err != nil {
 		return models.Task{}, err
 	}
-	return task, nil
+	return updatedTask, nil
 }
 
-func (t *TaskServiceImpl) Delete(task models.Task) error {
-	err := t.taskRepository.Delete(task)
+func (t *TaskServiceImpl) Delete(id int) error {
+	err := t.taskRepository.Delete(id)
 	if err != nil {
 		return err
 	}
