@@ -18,6 +18,7 @@ type User struct {
 	OAuth2Token    string         `json:"oauth2_token"`
 	Status         string         `json:"status" gorm:"default:'active'"`
 	Roles          []Role         `json:"roles" gorm:"many2many:user_roles"`
+	Otp            int            `gorm:"otp"`
 	LastLogin      *time.Time     `json:"last_login"`
 	CreatedAt      time.Time      `json:"created_at"`
 	UpdatedAt      time.Time      `json:"updated_at"`

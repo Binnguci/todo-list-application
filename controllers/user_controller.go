@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"todo-app/dto/request"
@@ -18,48 +17,48 @@ type UserController struct {
 func NewUserController(userService services.UserService) *UserController {
 	return &UserController{userService: userService}
 }
-
-func (c *UserController) RegisterUser(ctx *gin.Context) {
+func (u *UserController) RegisterUser(c *gin.Context) {
 	var req request.RegisterRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, response.APIResponse{
-			Status:  error.INVALID_REQUEST.Code,
-			Message: error.INVALID_REQUEST.Message,
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, response.APIResponse{
+			Status:  http.StatusBadRequest,
+			Message: "Invalid input",
+			Error:   err.Error(),
 		})
 		return
 	}
 
-	userResponse, err := c.userService.Register(req)
+	user, err := u.userService.Register(req)
 	if err != nil {
-		var appErr error.AppError
-		if errors.As(err, &appErr) {
-			ctx.JSON(appErr.Code, response.APIResponse{
-				Status:  appErr.Code,
-				Message: appErr.Message,
+		if err == error.USERNAME_ALREADY_EXISTS || err == error.EMAIL_ALREADY_EXISTS {
+			c.JSON(http.StatusConflict, response.APIResponse{
+				Status:  http.StatusConflict,
+				Message: err.Error(),
 			})
-		} else {
-			ctx.JSON(error.INTERNAL_SERVER_ERROR.Code, response.APIResponse{
-				Status:  error.INTERNAL_SERVER_ERROR.Code,
-				Message: error.INTERNAL_SERVER_ERROR.Message,
-			})
+			return
 		}
+		c.JSON(http.StatusInternalServerError, response.APIResponse{
+			Status:  http.StatusInternalServerError,
+			Message: "Failed to register user",
+			Error:   err.Error(),
+		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, response.APIResponse{
-		Status:  error.CREATE_SUCCESS.Code,
-		Message: error.CREATE_SUCCESS.Message,
-		Data:    userResponse,
+	c.JSON(http.StatusCreated, response.APIResponse{
+		Status:  http.StatusCreated,
+		Message: "User registered successfully",
+		Data:    user,
 	})
 }
-func (c *UserController) Login(ctx *gin.Context) {
+func (u *UserController) Login(ctx *gin.Context) {
 	var req request.AuthenticationRequest
 	if err := ctx.BindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
 
-	user, err := c.userService.VerifyUser(req.Username, req.Password)
+	user, err := u.userService.VerifyUser(req.Username, req.Password)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
@@ -71,5 +70,10 @@ func (c *UserController) Login(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"token": token})
+	ctx.JSON(http.StatusOK, response.APIResponse{
+		Status:  http.StatusOK,
+		Message: "Login successful",
+		Data:    gin.H{"token": token},
+	})
+
 }

@@ -7,7 +7,6 @@ import (
 	"todo-app/config"
 )
 
-// JWTMiddleware validates the JWT token and extracts user information.
 func JWTMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString := r.Header.Get("Authorization")

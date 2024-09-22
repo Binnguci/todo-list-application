@@ -22,5 +22,6 @@ func UserRoutes(userController *controllers.UserController, taskController *cont
 		taskRoutes.PUT("/:id", taskController.Update)
 		taskRoutes.DELETE("/:id", taskController.Delete)
 	}
+	r.Use(middleware.ErrorHandlingMiddleware)
 	return r
 }

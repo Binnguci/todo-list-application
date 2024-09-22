@@ -8,14 +8,12 @@ type AppError struct {
 }
 
 var (
-	// Success Codes
 	SUCCESS        = AppError{200, "Success"}
 	DELETE_SUCCESS = AppError{200, "Delete success"}
 	CREATE_SUCCESS = AppError{201, "Create success"}
 	UPDATE_SUCCESS = AppError{200, "Update success"}
 	FOUND          = AppError{200, "Found"}
 
-	// Client Errors
 	INVALID_REQUEST         = AppError{400, "Invalid request"}
 	PARAMETER_NOT_VALID     = AppError{400, "Parameter not valid or validation error"}
 	PARAMETER_MISSING       = AppError{400, "Parameter missing"}
@@ -33,7 +31,6 @@ var (
 	INVALID_OTP             = AppError{400, "Invalid OTP"}
 	ACCOUNT_NOT_VERIFIED    = AppError{400, "Account not verified"}
 
-	// Server Errors
 	INTERNAL_SERVER_ERROR = AppError{500, "Internal Server Error"}
 	SERVICE_UNAVAILABLE   = AppError{503, "Service Unavailable"}
 	GATEWAY_TIMEOUT       = AppError{504, "Gateway Timeout"}

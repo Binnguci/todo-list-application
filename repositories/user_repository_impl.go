@@ -29,7 +29,7 @@ func (r *UserRepositoryImpl) Register(req request.RegisterRequest) (models.User,
 		Password: hashpass,
 		Email:    req.Email,
 		FullName: req.FullName,
-		Status:   "active",
+		Status:   "off",
 		Roles:    []models.Role{defaultRole},
 	}
 	result := r.Db.Create(&user)
@@ -47,4 +47,12 @@ func (r *UserRepositoryImpl) FindByUsername(username string) (models.User, error
 	}
 	return user, nil
 
+}
+
+func (r *UserRepositoryImpl) FindByEmail(email string) (models.User, error) {
+	var user models.User
+	if err := r.Db.Where("email = ?", email).Preload("Roles").First(&user).Error; err != nil {
+		return models.User{}, err
+	}
+	return user, nil
 }

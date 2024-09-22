@@ -14,11 +14,12 @@ func NewTaskRepositoryImpl(db *gorm.DB) TaskRepository {
 }
 
 func (t *TaskRepositoryImpl) FindAll() ([]models.Task, error) {
-	err := t.Db.Find(&[]models.Task{}).Error
+	var tasks []models.Task
+	err := t.Db.Find(&tasks).Error
 	if err != nil {
 		return nil, err
 	}
-	return []models.Task{}, nil
+	return tasks, nil
 }
 
 func (t *TaskRepositoryImpl) FindByID(id int) (models.Task, error) {
@@ -37,18 +38,28 @@ func (t *TaskRepositoryImpl) Create(task models.Task) (models.Task, error) {
 	return task, nil
 }
 
-func (t *TaskRepositoryImpl) Update(task models.Task) (models.Task, error) {
-	err := t.Db.Save(&task).Error
-	if err != nil {
+func (t *TaskRepositoryImpl) Update(id int, task models.Task) (models.Task, error) {
+	var existingTask models.Task
+	if err := t.Db.First(&existingTask, id).Error; err != nil {
 		return models.Task{}, err
 	}
-	return task, nil
+
+	existingTask.Title = task.Title
+	existingTask.Description = task.Description
+	existingTask.IsCompleted = task.IsCompleted
+	existingTask.Deadline = task.Deadline
+
+	if err := t.Db.Save(&existingTask).Error; err != nil {
+		return models.Task{}, err
+	}
+
+	return existingTask, nil
 }
 
-func (t *TaskRepositoryImpl) Delete(task models.Task) error {
-	err := t.Db.Delete(&task).Error
-	if err != nil {
+func (t *TaskRepositoryImpl) Delete(id int) error {
+	var task models.Task
+	if err := t.Db.First(&task, id).Error; err != nil {
 		return err
 	}
-	return nil
+	return t.Db.Delete(&task).Error
 }
