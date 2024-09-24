@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"gorm.io/gorm"
+	"todo-app/dto/request"
 	"todo-app/models"
 )
 
@@ -30,7 +31,13 @@ func (t *TaskRepositoryImpl) FindByID(id int) (models.Task, error) {
 	return models.Task{}, nil
 }
 
-func (t *TaskRepositoryImpl) Create(task models.Task) (models.Task, error) {
+func (t *TaskRepositoryImpl) Create(newTask request.TaskRequest) (models.Task, error) {
+	task := models.Task{
+		Title:       newTask.Title,
+		Description: newTask.Description,
+		UserID:      newTask.UserID,
+	}
+
 	err := t.Db.Create(&task).Error
 	if err != nil {
 		return models.Task{}, err

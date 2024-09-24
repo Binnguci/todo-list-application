@@ -1,6 +1,7 @@
 package services
 
 import (
+	"todo-app/dto/request"
 	"todo-app/models"
 	"todo-app/repositories"
 )
@@ -29,8 +30,8 @@ func (t *TaskServiceImpl) FindByID(id int) (models.Task, error) {
 	return task, nil
 }
 
-func (t *TaskServiceImpl) Create(task models.Task) (models.Task, error) {
-	task, err := t.taskRepository.Create(task)
+func (t *TaskServiceImpl) Create(newTask request.TaskRequest) (models.Task, error) {
+	task, err := t.taskRepository.Create(newTask)
 	if err != nil {
 		return models.Task{}, err
 	}

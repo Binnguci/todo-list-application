@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
+	"todo-app/dto/request"
 	"todo-app/dto/response"
 	"todo-app/error"
 	"todo-app/models"
@@ -63,8 +64,8 @@ func (t *TaskController) FindById(ctx *gin.Context) {
 }
 
 func (t *TaskController) Create(ctx *gin.Context) {
-	var task models.Task
-	if err := ctx.ShouldBindJSON(&task); err != nil {
+	var newTask request.TaskRequest
+	if err := ctx.ShouldBindJSON(&newTask); err != nil {
 		ctx.JSON(http.StatusBadRequest, response.APIResponse{
 			Status:  error.INVALID_REQUEST.Code,
 			Message: error.INVALID_REQUEST.Message,
@@ -72,7 +73,7 @@ func (t *TaskController) Create(ctx *gin.Context) {
 		return
 	}
 
-	taskResponse, err := t.taskService.Create(task)
+	taskResponse, err := t.taskService.Create(newTask)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, response.APIResponse{
 			Status:  error.INTERNAL_SERVER_ERROR.Code,

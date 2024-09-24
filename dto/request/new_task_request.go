@@ -1,0 +1,7 @@
+package request
+
+type TaskRequest struct {
+	Title       string `json:"title" form:"title" binding:"required"`
+	Description string `json:"description" form:"description"`
+	UserID      uint   `json:"user_id" form:"user_id" binding:"required"`
+}

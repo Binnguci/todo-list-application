@@ -10,11 +10,9 @@ type Task struct {
 	Title       string         `json:"title" gorm:"not null"`
 	Description string         `json:"description"`
 	IsCompleted bool           `json:"is_completed" gorm:"default:false"`
-	Deadline    time.Time      `json:"deadline"`
+	Deadline    *time.Time     `json:"deadline"`
 	UserID      uint           `json:"user_id" gorm:"not null"`
 	CreatedAt   time.Time      `json:"created_at"`
 	UpdatedAt   time.Time      `json:"updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"index"`
-
-	//User User `gorm:"foreignKey:UserID"`
 }

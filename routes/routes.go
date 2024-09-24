@@ -8,6 +8,7 @@ import (
 
 func UserRoutes(userController *controllers.UserController, taskController *controllers.TaskController) *gin.Engine {
 	r := gin.Default()
+	r.Use(middleware.CORSMiddleware())
 	r.Use(middleware.ErrorHandler)
 	userRoutes := r.Group("/api/user/")
 	{
