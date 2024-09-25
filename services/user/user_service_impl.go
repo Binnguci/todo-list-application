@@ -8,8 +8,8 @@ import (
 	"log"
 	"math/rand"
 	"time"
-	"todo-app/dto/request"
-	"todo-app/dto/response"
+	"todo-app/domain/request"
+	"todo-app/domain/response"
 	"todo-app/repositories/user"
 	"todo-app/utils"
 )

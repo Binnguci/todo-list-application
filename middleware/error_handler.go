@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"todo-app/dto/response"
+	"todo-app/domain/response"
 )
 
 func ErrorHandler(c *gin.Context) {

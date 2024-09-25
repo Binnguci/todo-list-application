@@ -1,7 +1,7 @@
 package task
 
 import (
-	"todo-app/dto/request"
+	"todo-app/domain/request"
 	"todo-app/models"
 )
 

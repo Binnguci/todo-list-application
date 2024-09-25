@@ -3,8 +3,8 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"todo-app/dto/request"
-	"todo-app/dto/response"
+	"todo-app/domain/request"
+	"todo-app/domain/response"
 	"todo-app/error"
 	"todo-app/services/user"
 	"todo-app/utils"

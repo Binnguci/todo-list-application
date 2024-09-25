@@ -6,15 +6,34 @@ import (
 	"todo-app/middleware"
 )
 
-func UserRoutes(userController *controllers.UserController, taskController *controllers.TaskController) *gin.Engine {
+type RouteControllers struct {
+	UserController *controllers.UserController
+	TaskController *controllers.TaskController
+	TagController  *controllers.TagController
+}
+
+func InitRoutes(controllers RouteControllers) *gin.Engine {
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())
 	r.Use(middleware.ErrorHandler)
-	userRoutes := r.Group("/api/user/")
+
+	initUserRoutes(r, controllers.UserController)
+	initTaskRoutes(r, controllers.TaskController)
+	initTagRoutes(r, controllers.TagController)
+
+	r.Use(middleware.ErrorHandlingMiddleware)
+	return r
+}
+
+func initUserRoutes(r *gin.Engine, userController *controllers.UserController) {
+	userRoutes := r.Group("/api/user")
 	{
 		userRoutes.POST("/register", userController.RegisterUser)
 		userRoutes.POST("/login", userController.Login)
 	}
+}
+
+func initTaskRoutes(r *gin.Engine, taskController *controllers.TaskController) {
 	taskRoutes := r.Group("/api/task")
 	{
 		taskRoutes.GET("/", taskController.FindAll)
@@ -23,6 +42,11 @@ func UserRoutes(userController *controllers.UserController, taskController *cont
 		taskRoutes.PUT("/:id", taskController.Update)
 		taskRoutes.DELETE("/:id", taskController.Delete)
 	}
-	r.Use(middleware.ErrorHandlingMiddleware)
-	return r
+}
+
+func initTagRoutes(r *gin.Engine, tagController *controllers.TagController) {
+	tagRoutes := r.Group("/api/tag")
+	{
+		tagRoutes.GET("/", tagController.FindAll)
+	}
 }

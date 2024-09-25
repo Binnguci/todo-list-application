@@ -2,7 +2,7 @@ package task
 
 import (
 	"gorm.io/gorm"
-	"todo-app/dto/request"
+	"todo-app/domain/request"
 	"todo-app/models"
 )
 
