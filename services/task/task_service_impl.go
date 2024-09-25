@@ -1,16 +1,16 @@
-package services
+package task
 
 import (
 	"todo-app/dto/request"
 	"todo-app/models"
-	"todo-app/repositories"
+	"todo-app/repositories/task"
 )
 
 type TaskServiceImpl struct {
-	taskRepository repositories.TaskRepository
+	taskRepository task.TaskRepository
 }
 
-func NewTaskServiceImpl(taskRepository repositories.TaskRepository) TaskService {
+func NewTaskServiceImpl(taskRepository task.TaskRepository) TaskService {
 	return &TaskServiceImpl{taskRepository: taskRepository}
 }
 

@@ -1,4 +1,4 @@
-package services
+package user
 
 import (
 	"errors"
@@ -10,15 +10,15 @@ import (
 	"time"
 	"todo-app/dto/request"
 	"todo-app/dto/response"
-	"todo-app/repositories"
+	"todo-app/repositories/user"
 	"todo-app/utils"
 )
 
 type UserServiceImpl struct {
-	userRepository repositories.UserRepository
+	userRepository user.UserRepository
 }
 
-func NewUserServiceImpl(userRepository repositories.UserRepository) UserService {
+func NewUserServiceImpl(userRepository user.UserRepository) UserService {
 	return &UserServiceImpl{userRepository: userRepository}
 }
 

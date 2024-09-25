@@ -1,4 +1,4 @@
-package repositories
+package user
 
 import (
 	"gorm.io/gorm"
@@ -16,8 +16,7 @@ func NewUserRepositoryImpl(db *gorm.DB) UserRepository {
 }
 
 func (r *UserRepositoryImpl) Register(req request.RegisterRequest) (models.User, error) {
-	var defaultRole models.Role
-	if err := r.Db.Where("name = ?", "user").First(&defaultRole).Error; err != nil {
+	if err := r.Db.Where("name = ?", "user").Error; err != nil {
 		return models.User{}, err
 	}
 	hashpass, err := utils.HashPassword(req.Password)
@@ -30,7 +29,6 @@ func (r *UserRepositoryImpl) Register(req request.RegisterRequest) (models.User,
 		Email:    req.Email,
 		FullName: req.FullName,
 		Status:   "off",
-		Roles:    []models.Role{defaultRole},
 	}
 	result := r.Db.Create(&user)
 	if result.Error != nil {

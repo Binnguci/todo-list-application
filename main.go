@@ -6,20 +6,22 @@ import (
 	"time"
 	"todo-app/config"
 	"todo-app/controllers"
-	"todo-app/repositories"
+	"todo-app/repositories/task"
+	"todo-app/repositories/user"
 	"todo-app/routes"
-	"todo-app/services"
+	task2 "todo-app/services/task"
+	user2 "todo-app/services/user"
 )
 
 func main() {
 	config.ConnectDatabase()
 
-	userRepository := repositories.NewUserRepositoryImpl(config.DB)
-	userService := services.NewUserServiceImpl(userRepository)
+	userRepository := user.NewUserRepositoryImpl(config.DB)
+	userService := user2.NewUserServiceImpl(userRepository)
 	userController := controllers.NewUserController(userService)
 
-	taskRepository := repositories.NewTaskRepositoryImpl(config.DB)
-	taskService := services.NewTaskServiceImpl(taskRepository)
+	taskRepository := task.NewTaskRepositoryImpl(config.DB)
+	taskService := task2.NewTaskServiceImpl(taskRepository)
 	taskController := controllers.NewTaskController(taskService)
 
 	router := routes.UserRoutes(userController, taskController)

@@ -1,4 +1,4 @@
-package repositories
+package task
 
 import (
 	"todo-app/dto/request"

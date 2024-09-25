@@ -1,4 +1,4 @@
-package repositories
+package tag
 
 import (
 	"gorm.io/gorm"

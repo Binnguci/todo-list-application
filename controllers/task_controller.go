@@ -10,14 +10,14 @@ import (
 	"todo-app/dto/response"
 	"todo-app/error"
 	"todo-app/models"
-	"todo-app/services"
+	"todo-app/services/task"
 )
 
 type TaskController struct {
-	taskService services.TaskService
+	taskService task.TaskService
 }
 
-func NewTaskController(taskService services.TaskService) *TaskController {
+func NewTaskController(taskService task.TaskService) *TaskController {
 	return &TaskController{taskService: taskService}
 }
 
