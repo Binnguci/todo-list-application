@@ -1,15 +1,16 @@
-package services
+package task
 
 import (
+	"todo-app/dto/request"
 	"todo-app/models"
-	"todo-app/repositories"
+	"todo-app/repositories/task"
 )
 
 type TaskServiceImpl struct {
-	taskRepository repositories.TaskRepository
+	taskRepository task.TaskRepository
 }
 
-func NewTaskServiceImpl(taskRepository repositories.TaskRepository) TaskService {
+func NewTaskServiceImpl(taskRepository task.TaskRepository) TaskService {
 	return &TaskServiceImpl{taskRepository: taskRepository}
 }
 
@@ -29,8 +30,8 @@ func (t *TaskServiceImpl) FindByID(id int) (models.Task, error) {
 	return task, nil
 }
 
-func (t *TaskServiceImpl) Create(task models.Task) (models.Task, error) {
-	task, err := t.taskRepository.Create(task)
+func (t *TaskServiceImpl) Create(newTask request.TaskRequest) (models.Task, error) {
+	task, err := t.taskRepository.Create(newTask)
 	if err != nil {
 		return models.Task{}, err
 	}

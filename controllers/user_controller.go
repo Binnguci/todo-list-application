@@ -6,15 +6,15 @@ import (
 	"todo-app/dto/request"
 	"todo-app/dto/response"
 	"todo-app/error"
-	"todo-app/services"
+	"todo-app/services/user"
 	"todo-app/utils"
 )
 
 type UserController struct {
-	userService services.UserService
+	userService user.UserService
 }
 
-func NewUserController(userService services.UserService) *UserController {
+func NewUserController(userService user.UserService) *UserController {
 	return &UserController{userService: userService}
 }
 func (u *UserController) RegisterUser(c *gin.Context) {
