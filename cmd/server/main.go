@@ -1,10 +1,7 @@
 package main
 
-import (
-	"todo-app/config"
-)
+import "github.com/binnguci/todo-app/internal/initialize"
 
 func main() {
-	config.ConnectDatabase()
-
+	initialize.Run()
 }
