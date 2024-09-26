@@ -9,9 +9,9 @@ import (
 	"math/rand"
 	"time"
 	"todo-app/domain/request"
-	"todo-app/domain/response"
-	"todo-app/repositories/user"
-	"todo-app/utils"
+	"todo-app/internal/repositories/user"
+	"todo-app/pkg/response"
+	utils2 "todo-app/pkg/utils"
 )
 
 type UserServiceImpl struct {
@@ -19,20 +19,22 @@ type UserServiceImpl struct {
 }
 
 func NewUserServiceImpl(userRepository user.UserRepository) UserService {
-	return &UserServiceImpl{userRepository: userRepository}
+	return &UserServiceImpl{
+		userRepository: userRepository,
+	}
 }
 
-func (u *UserServiceImpl) Register(request request.RegisterRequest) (response.UserResponse, error) {
-	err := u.validationRegister(request.Username, request.Email)
+func (usi *UserServiceImpl) Register(request request.RegisterRequest) (response.UserResponse, error) {
+	err := usi.validationRegister(request.Username, request.Email)
 	if err != nil {
 		log.Printf("Validation failed: %v", err)
 		return response.UserResponse{}, err
 	}
-	if err := utils.ValidatePassword(request.Password); err != nil {
+	if err := utils2.ValidatePassword(request.Password); err != nil {
 		log.Printf("Password validation failed: %v", err)
 		return response.UserResponse{}, err
 	}
-	user, err := u.userRepository.Register(request)
+	user, err := usi.userRepository.Register(request)
 	if err != nil {
 		return response.UserResponse{}, err
 	}
@@ -47,12 +49,12 @@ func (u *UserServiceImpl) Register(request request.RegisterRequest) (response.Us
 	return userResponse, nil
 }
 
-func (u *UserServiceImpl) VerifyUser(username string, password string) (response.UserResponse, error) {
-	user, err := u.userRepository.FindByUsername(username)
+func (usi *UserServiceImpl) VerifyUser(username string, password string) (response.UserResponse, error) {
+	user, err := usi.userRepository.FindByUsername(username)
 	if err != nil {
 		return response.UserResponse{}, errors.New("user not found")
 	}
-	err = utils.ComparePasswords(user.Password, password)
+	err = utils2.ComparePasswords(user.Password, password)
 	if err != nil {
 		return response.UserResponse{}, errors.New("invalid credentials")
 	}
@@ -64,15 +66,15 @@ func (u *UserServiceImpl) VerifyUser(username string, password string) (response
 	return userResponse, nil
 }
 
-func (u *UserServiceImpl) validationRegister(username string, email string) error {
-	_, err := u.userRepository.FindByUsername(username)
+func (usi *UserServiceImpl) validationRegister(username string, email string) error {
+	_, err := usi.userRepository.FindByUsername(username)
 	if err == nil {
 		return errors.New("username already exists")
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
 		return fmt.Errorf("error checking username: %w", err)
 	}
 
-	_, err = u.userRepository.FindByEmail(email)
+	_, err = usi.userRepository.FindByEmail(email)
 	if err == nil {
 		return errors.New("email already exists")
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
@@ -81,7 +83,7 @@ func (u *UserServiceImpl) validationRegister(username string, email string) erro
 	return nil
 }
 
-func (u *UserServiceImpl) generateOTP() (string, error) {
+func generateOTP() (string, error) {
 	rand.Seed(time.Now().UnixNano())
 	digits := "0123456789"
 

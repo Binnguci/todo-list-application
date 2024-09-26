@@ -2,7 +2,7 @@ package user
 
 import (
 	"todo-app/domain/request"
-	"todo-app/domain/response"
+	"todo-app/pkg/response"
 )
 
 type UserService interface {

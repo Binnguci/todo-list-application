@@ -1,8 +1,8 @@
 package tag
 
 import (
-	"todo-app/models"
-	"todo-app/repositories/tag"
+	"todo-app/internal/models"
+	"todo-app/internal/repositories/tag"
 )
 
 type TagServiceImpl struct {
@@ -13,8 +13,8 @@ func NewTagServiceImpl(tagRepository tag.TagRepository) TagService {
 	return &TagServiceImpl{tagRepository: tagRepository}
 }
 
-func (t *TagServiceImpl) FindAll() ([]models.Tag, error) {
-	tag, err := t.tagRepository.FindAll()
+func (tsi *TagServiceImpl) FindAll() ([]models.Tag, error) {
+	tag, err := tsi.tagRepository.FindAll()
 	if err != nil {
 		return nil, err
 	}

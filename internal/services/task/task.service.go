@@ -2,10 +2,10 @@ package task
 
 import (
 	"todo-app/domain/request"
-	"todo-app/models"
+	"todo-app/internal/models"
 )
 
-type TaskRepository interface {
+type TaskService interface {
 	FindAll() ([]models.Task, error)
 	FindByID(id int) (models.Task, error)
 	Create(task request.TaskRequest) (models.Task, error)
