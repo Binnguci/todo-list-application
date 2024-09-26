@@ -7,7 +7,6 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"os"
-	"todo-app/constants"
 )
 
 var DB *gorm.DB
@@ -32,5 +31,5 @@ func ConnectDatabase() {
 	}
 
 	DB = db
-	fmt.Println(constants.CONNECT_DB_SUCCESS)
+	fmt.Println("Database connected")
 }
