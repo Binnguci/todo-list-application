@@ -7,8 +7,6 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"os"
-	"todo-app/constants"
-	"todo-app/models"
 )
 
 var DB *gorm.DB
@@ -31,8 +29,7 @@ func ConnectDatabase() {
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
-	err = db.AutoMigrate(&models.Task{}, &models.Tag{}, &models.TaskTag{}, &models.User{}, &models.Category{})
 
 	DB = db
-	fmt.Println(constants.CONNECT_DB_SUCCESS)
+	fmt.Println("Database connected")
 }
