@@ -14,7 +14,7 @@ type APIResponse struct {
 func SuccessResponse(ctx *gin.Context, code int, data interface{}) {
 	ctx.JSON(http.StatusOK, APIResponse{
 		code,
-		mgs[code],
+		msg[code],
 		data,
 	})
 }
@@ -22,7 +22,7 @@ func SuccessResponse(ctx *gin.Context, code int, data interface{}) {
 func ErrorResponse(ctx *gin.Context, code int, message string) {
 	ctx.JSON(http.StatusOK, APIResponse{
 		code,
-		mgs[code],
+		msg[code],
 		nil,
 	})
 }

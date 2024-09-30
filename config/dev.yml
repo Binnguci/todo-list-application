@@ -6,7 +6,7 @@ database:
   port: 3306
   username: root
   password: root
-  dbname: todo-list
+  dbname: furniture2
   maxIdleConns: 10
   maxOpenConns: 100
   connMaxLifetime: 3600
@@ -19,6 +19,6 @@ logger:
   compress: true
 redis:
   host: 127.0.0.1
-  port: 6381
+  port: 6379
   password:
   database: 0

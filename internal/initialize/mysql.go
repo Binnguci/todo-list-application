@@ -6,6 +6,7 @@ import (
 	"github.com/binnguci/todo-app/internal/models"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
+	"gorm.io/gen"
 	"gorm.io/gorm"
 	"time"
 )
@@ -22,15 +23,18 @@ func InitMySQL() {
 	dsn := "%s:%s@tcp(%s:%v)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 	var s = fmt.Sprintf(dsn, m.Username, m.Password, m.Host, m.Port, m.Dbname)
 	fmt.Println(s)
+
 	db, err := gorm.Open(mysql.Open(s), &gorm.Config{
 		SkipDefaultTransaction: false,
 	})
+
 	checkErrorPanic(err, "Initialize MySQL error")
 	global.Logger.Info("Initialize MySQL success")
 	global.Mdb = db
 	SetPool()
-	migrateTables()
+	//genTableDAO()
 }
+
 func SetPool() {
 	m := global.Config.Mysql
 	sqlDB, err := global.Mdb.DB()
@@ -42,9 +46,22 @@ func SetPool() {
 	sqlDB.SetConnMaxLifetime(time.Duration(m.ConnMaxLifeTime))
 }
 
+// gen db sang model
+func genTableDAO() {
+	g := gen.NewGenerator(gen.Config{
+		OutPath: "./internal/model",
+		Mode:    gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
+	})
+	g.UseDB(global.Mdb)
+	g.GenerateAllTable()
+	g.Execute()
+}
+
+// gen model sang db
 func migrateTables() {
 	err := global.Mdb.AutoMigrate(
 		&models.User{},
+		&models.Role{},
 	)
 	if err != nil {
 		global.Logger.Error("Migrate tables error", zap.Error(err))
