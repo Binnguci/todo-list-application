@@ -15,7 +15,7 @@ const TableNameCart = "carts"
 // Cart mapped from table <carts>
 type Cart struct {
 	ID        string         `gorm:"column:id;primaryKey" json:"id"`
-	UserID    string         `gorm:"column:user_id;not null" json:"user_id"`
+	UserID    int64          `gorm:"column:user_id;not null" json:"user_id"`
 	Quantity  int32          `gorm:"column:quantity" json:"quantity"`
 	CreatedAt time.Time      `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"column:updated_at;default:CURRENT_TIMESTAMP" json:"updated_at"`

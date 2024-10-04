@@ -6,19 +6,7 @@ database:
   port: 3306
   username: root
   password: root
-  dbname: furniture2
+  dbname: furniture3
   maxIdleConns: 10
   maxOpenConns: 100
   connMaxLifetime: 3600
-logger:
-  logLevel: debug
-  fileLogName: "./storage/logs/dev.001.log"
-  maxSize: 500
-  maxBackups: 3
-  maxAge: 28
-  compress: true
-redis:
-  host: 127.0.0.1
-  port: 6379
-  password:
-  database: 0

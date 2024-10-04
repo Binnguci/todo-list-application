@@ -42,9 +42,7 @@ func NewLogger(config setting.LoggerSetting) *LoggerZap {
 func getEncoderLog() zapcore.Encoder {
 	encodeConfig := zap.NewProductionEncoderConfig()
 	encodeConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	// from timestamp to Time
 	encodeConfig.TimeKey = "time"
-	// from info to INFO
 	encodeConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	encodeConfig.EncodeCaller = zapcore.ShortCallerEncoder
 	return zapcore.NewJSONEncoder(encodeConfig)

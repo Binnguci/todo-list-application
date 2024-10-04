@@ -3,8 +3,7 @@ package initialize
 import (
 	"fmt"
 	"github.com/binnguci/todo-app/global"
-	"github.com/binnguci/todo-app/internal/models"
-	"go.uber.org/zap"
+	"github.com/binnguci/todo-app/internal/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gen"
 	"gorm.io/gorm"
@@ -13,7 +12,6 @@ import (
 
 func checkErrorPanic(err error, errString string) {
 	if err != nil {
-		global.Logger.Error(errString, zap.Error(err))
 		panic(errString)
 	}
 }
@@ -29,17 +27,17 @@ func InitMySQL() {
 	})
 
 	checkErrorPanic(err, "Initialize MySQL error")
-	global.Logger.Info("Initialize MySQL success")
+	fmt.Println("Connect to MySQL success")
 	global.Mdb = db
 	SetPool()
-	//genTableDAO()
+	genTableDAO()
 }
 
 func SetPool() {
 	m := global.Config.Mysql
 	sqlDB, err := global.Mdb.DB()
 	if err != nil {
-		global.Logger.Error("SetPool error", zap.Error(err))
+		panic("Get DB error")
 	}
 	sqlDB.SetMaxIdleConns(global.Config.Mysql.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(global.Config.Mysql.MaxOpenConns)
@@ -60,10 +58,10 @@ func genTableDAO() {
 // gen model sang db
 func migrateTables() {
 	err := global.Mdb.AutoMigrate(
-		&models.User{},
-		&models.Role{},
+		&model.User{},
+		&model.Role{},
 	)
 	if err != nil {
-		global.Logger.Error("Migrate tables error", zap.Error(err))
+		panic("Migrate tables error")
 	}
 }

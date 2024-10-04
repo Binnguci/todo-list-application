@@ -14,7 +14,7 @@ const TableNameUser = "users"
 
 // User mapped from table <users>
 type User struct {
-	ID             string         `gorm:"column:id;primaryKey" json:"id"`
+	ID             int64          `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
 	Username       string         `gorm:"column:username;not null" json:"username"`
 	Email          string         `gorm:"column:email;not null" json:"email"`
 	Password       string         `gorm:"column:password" json:"password"`
@@ -26,6 +26,7 @@ type User struct {
 	OtpExpired     time.Time      `gorm:"column:otp_expired" json:"otp_expired"`
 	RoleID         int32          `gorm:"column:role_id;not null" json:"role_id"`
 	IsActive       bool           `gorm:"column:is_active" json:"is_active"`
+	IsLocked       bool           `gorm:"column:is_locked" json:"is_locked"`
 	CreatedAt      time.Time      `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt      time.Time      `gorm:"column:updated_at;default:CURRENT_TIMESTAMP" json:"updated_at"`
 	DeletedAt      gorm.DeletedAt `gorm:"column:deleted_at" json:"deleted_at"`

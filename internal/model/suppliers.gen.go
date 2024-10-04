@@ -21,7 +21,7 @@ type Supplier struct {
 	Address      string         `gorm:"column:address" json:"address"`
 	Country      string         `gorm:"column:country" json:"country"`
 	Website      string         `gorm:"column:website" json:"website"`
-	IsActive     bool           `gorm:"column:is_active;default:1" json:"is_active"`
+	IsActive     int32          `gorm:"column:is_active;default:1" json:"is_active"`
 	CreatedAt    time.Time      `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt    time.Time      `gorm:"column:updated_at;default:CURRENT_TIMESTAMP" json:"updated_at"`
 	DeletedAt    gorm.DeletedAt `gorm:"column:deleted_at" json:"deleted_at"`
