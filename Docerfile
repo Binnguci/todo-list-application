@@ -1,8 +1,0 @@
-FROM golang:alpine
-WORKDIR /build
-COPY . .
-RUN go build -o go-ecommerce .
-WORKDIR /dist
-RUN cp /build/nameDemo
-EXPOSE 8009
-CMD [ "/dist/nameDemo" ]
